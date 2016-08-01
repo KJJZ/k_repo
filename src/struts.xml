@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+		"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+		"http://struts.apache.org/dtds/struts-2.3.dtd" >
+<struts>
+	<constant name="struts.enable.DynamicMethodInvocation" value="false"/>
+	<constant name="struts.devMode" value="true"/>
+	<constant name="struts.objectFactory" value="spring"/>
+	<constant name="struts.custom.i18n.resources" value="application" />
+	<package name="mysample1" namespace="/" extends="json-default">
+		<interceptors>
+			<interceptor name="interceptor1" class="com.sample1.interceptor.myInterceptor"></interceptor>
+			<interceptor-stack name="myInterceptorStack1">
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+				<interceptor-ref name="interceptor1"></interceptor-ref>
+			</interceptor-stack>
+			<interceptor name="methodinterceptor1" class="com.sample1.interceptor.MyMethodInterceptor1">
+				<param name="name">intercept methods</param>
+			</interceptor>
+		</interceptors>
+		<global-results>
+			<result name="error">/WEB-INF/content/error.jsp</result>
+			<result name="sqlexcep">/WEB-INF/content/sqlexception.jsp</result>
+			<result name="excep">/WEB-INF/content/exception.jsp</result>
+			<result name="success">/WEB-INF/content/index.jsp</result>
+		</global-results>
+		<!--  
+		<global-exception-mappings>
+			<exception-mapping exception="java.sql.SQLException" result="sqlexcep" />
+			<exception-mapping exception="java.lang.Exception" result="excep" />
+		</global-exception-mappings>
+		-->
+		<action name="*">
+			<result>/WEB-INF/content/{1}.jsp</result>
+		</action>
+		<action name="login" class="loginaction">
+			<result name="success">/WEB-INF/content/index.jsp</result>
+			<result name="input">/WEB-INF/content/loginForm.jsp</result>
+		</action>
+		<action name="usersinfojson" class="usersInfoJson">
+			<result name="success" type="json">
+				<param name="noCache">true</param>
+				<param name="contentType">text/html</param>
+			</result>
+		</action>
+	</package>
+</struts>
